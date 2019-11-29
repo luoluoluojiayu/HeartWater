@@ -19,8 +19,6 @@ class HeartView : View {
     var waveHeight = 130            //水波高度
     var waveWeight = 250            //水波宽度
     var waterPath = Path()
-    var randomWeight = 0
-    var randomHeight = 0
 
 
     var startX = 64                 //水波绘制的x轴起点
@@ -82,22 +80,17 @@ class HeartView : View {
     }
 
     /**
-     * 绘制一个水波
+     * 绘制一个水波，计算出三个控制点，三个控制点便是一个水波
      */
     private fun drawOneWave(waveHeight: Int, waveWeight: Int, waveStartX: Int, waveStartY: Int, path: Path?): Point {
-        val point1 = Point((waveStartX + waveWeight / 2).toInt(),
-                (waveStartY - waveHeight / 2).toInt())
-        val point2 = Point((waveStartX + waveWeight / 2 ).toInt(),
-                (waveStartY + waveHeight / 2 ).toInt())
-        val point3 = Point((waveStartX + waveWeight ).toInt(),
-                (waveStartY ).toInt())
+        val point1 = Point((waveStartX + waveWeight / 2),
+                (waveStartY - waveHeight / 2))
+        val point2 = Point((waveStartX + waveWeight / 2 ),
+                (waveStartY + waveHeight / 2 ))
+        val point3 = Point((waveStartX + waveWeight ),
+                (waveStartY ))
         path?.cubicTo(point1.x.toFloat(), point1.y.toFloat(), point2.x.toFloat(), point2.y.toFloat(), point3.x.toFloat(), point3.y.toFloat())
         return point3
-    }
-
-    private fun getIsNegative(): Int {
-        return if (Math.random() < 0.5) -1
-        else 1
     }
 
     fun start(){
@@ -106,11 +99,11 @@ class HeartView : View {
         timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
-                if (nowY < 411) {
+                if (nowY < 411) {   //水波超过爱心顶部，取消计时器
                     timer.cancel()
                 }
-                nowY -= 5
-                nowX -= 15
+                nowY -= 5           //每次移动5的像素
+                nowX -= 15          //每次移动15个像素
                 if (nowX < -waveWeight) {
                     nowX += waveWeight
                 }
